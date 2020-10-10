@@ -1,0 +1,23 @@
+version: "3.3"
+
+services:
+
+  menu-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    container_name: menu_api
+    volumes:
+      - ./src:/app/src
+      - ./spec:/app/spec
+    env_file:
+      - .env
+    ports:
+    - 8000:8000
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example

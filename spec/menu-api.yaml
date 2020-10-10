@@ -1,0 +1,107 @@
+swagger: "2.0"
+info:
+  description: "Food Menu API"
+  version: "1.0.0"
+  title: "Menu API"
+  contact:
+    email: "alex.cicioc1@gmail.com"
+host: "localhost:8000"
+basePath: "/v1"
+tags:
+  - name: "menu"
+    description: "Everything about the restaurant's menu"
+schemes:
+  - "http"
+paths:
+  /menus:
+    get:
+      tags:
+        - "menu"
+      summary: "Get a list of food menus"
+      operationId: "getFoodMenus"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "status"
+          in: "query"
+          description: "Status values that need to be considered for filter"
+          type: "array"
+          items:
+            type: "string"
+            enum:
+              - "published"
+              - "draft"
+            default: "draft"
+          collectionFormat: "multi"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/MenuList"
+        "400":
+          description: "Invalid status value"
+    post:
+      tags:
+        - "menu"
+      summary: "Add a new menu"
+      operationId: "createMenu"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Menu object"
+          required: true
+          schema:
+            $ref: "#/definitions/Menu"
+      responses:
+        "400":
+          description: "Bad Request"
+
+
+definitions:
+  MenuList:
+    properties:
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/Menu"
+
+  Menu:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
+        type: "string"
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/MenuItem"
+      status:
+        type: "string"
+        enum:
+          - "published"
+          - "draft"
+        default: "draft"
+
+  MenuItem:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      description:
+        type: "string"
+      addons:
+        type: array
+        items:
+          type: string
+      choices:
+        type: array
+        items:
+          type: string
