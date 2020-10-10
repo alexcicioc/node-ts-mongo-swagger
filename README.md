@@ -16,6 +16,9 @@
 1. Copy .env.example as .env
 1. `make rebuild`
 
+### Debugging in docker
+1. `docker logs -f menu_api`
+
 ### Running tests in docker
 1. `docker exec -it menu_api sh`
 1. `npm run build && npm run api-tests`
