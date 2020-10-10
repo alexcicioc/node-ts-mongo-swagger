@@ -1,9 +1,7 @@
-import express, { Response } from 'express';
+import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { extractCommonParams } from './helpers/query-params';
 import { AppRequest } from '../types/request';
-
-const router = express.Router();
 
 export const getMenus = async (req: AppRequest, res: Response): Promise<Response> => {
   const { menuOrm } = req.orms;
@@ -60,5 +58,3 @@ export const createMenu = async (req: AppRequest, res: Response): Promise<Respon
   const menu = await menuOrm.create({ title: body.title, status: body.status });
   return res.status(StatusCodes.CREATED).send({ id: menu.getDataValue('id') });
 };
-
-export default router;

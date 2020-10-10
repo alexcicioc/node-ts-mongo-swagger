@@ -114,6 +114,101 @@ paths:
           description: Bad request
         404:
           description: Not found
+  /menus/{id}/items:
+    get:
+      tags:
+        - "menuItems"
+      summary: "Get a food menu items by menu id"
+      operationId: "getFoodMenuItems"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+        - $ref: '#/parameters/limitQuery'
+        - $ref: '#/parameters/offsetQuery'
+        - name: "categoryId"
+          in: "query"
+          description: "Filter results by category id"
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MenuItemList"
+        400:
+          description: Bad request
+    post:
+      tags:
+        - "menuItems"
+      summary: "Add a new menu"
+      operationId: "createMenuItem"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+        - $ref: '#/parameters/menuItemBody'
+      responses:
+        "400":
+          description: "Bad Request"
+  /menus-items/{id}:
+    put:
+      tags:
+        - "menuItems"
+      summary: "Update a menu item"
+      operationId: "updateFoodMenuItem"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+        - $ref: '#/parameters/menuItemBody'
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+    delete:
+      tags:
+        - "menuItems"
+      summary: "Delete a menu item"
+      operationId: "deleteFoodMenuItem"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+  /menus-items/{id}/extras:
+    post:
+      tags:
+        - "extras"
+      summary: "Add extra to menu item"
+      operationId: "assignMenuItemExtra"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+        - name: "body"
+          in: "body"
+          schema:
+            $ref: '#/definitions/AssignExtraRequest'
+
+      responses:
+        "400":
+          description: "Bad Request"
   /categories:
     get:
       tags:
@@ -203,7 +298,95 @@ paths:
           description: Bad request
         404:
           description: Not found
+  /extras:
+    get:
+      tags:
+        - "extra"
+      summary: "Get a list of food extras"
+      operationId: "getFoodExtras"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/limitQuery'
+        - $ref: '#/parameters/offsetQuery'
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ExtraList"
+        "400":
+          description: "Invalid status value"
+    post:
+      tags:
+        - "extra"
+      summary: "Add a new extra"
+      operationId: "createExtra"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/extraBody'
+      responses:
+        "400":
+          description: "Bad Request"
 
+  /extras/{id}:
+    get:
+      tags:
+        - "extra"
+      summary: "Get a food extra by id"
+      operationId: "getFoodExtra"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ExtraList"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+    put:
+      tags:
+        - "extra"
+      summary: "Update a extra"
+      operationId: "updateFoodExtra"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+        - $ref: '#/parameters/extraBody'
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+    delete:
+      tags:
+        - "extra"
+      summary: "Delete a extra"
+      operationId: "deleteFoodExtra"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: Bad request
+        404:
+          description: Not found
 definitions:
   MenuList:
     properties:
@@ -211,12 +394,24 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/Menu"
+  MenuItemList:
+    properties:
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/MenuItem"
   CategoryList:
     properties:
       results:
         type: array
         items:
           $ref: "#/definitions/Category"
+  ExtraList:
+    properties:
+      results:
+        type: array
+        items:
+          $ref: "#/definitions/Extra"
   Menu:
     properties:
       title:
@@ -234,22 +429,46 @@ definitions:
         type: string
       description:
         type: string
-
-  MenuItem:
+  Extra:
     properties:
       title:
         type: string
       description:
         type: string
-      addons:
+      price:
+        type: number
+  MenuItem:
+    properties:
+      categoryId:
+        type: integer
+        format: int64
+      title:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
+      extras:
         type: array
         items:
-          type: string
-      choices:
-        type: array
-        items:
-          type: string
-
+          $ref: "#/definitions/Extra"
+  MenuItemRequest:
+    properties:
+      categoryId:
+        type: integer
+        format: int64
+      title:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
+  AssignExtraRequest:
+    type: object
+    properties:
+      extraId:
+        type: integer
+        format: int64
 parameters:
   idPath:
     name: "id"
@@ -267,6 +486,13 @@ parameters:
     schema:
       $ref: "#/definitions/Menu"
 
+  menuItemBody:
+    in: "body"
+    name: "body"
+    required: true
+    schema:
+      $ref: "#/definitions/MenuItemRequest"
+
   categoryBody:
     in: "body"
     name: "body"
@@ -274,6 +500,14 @@ parameters:
     required: true
     schema:
       $ref: "#/definitions/Category"
+
+  extraBody:
+    in: "body"
+    name: "body"
+    description: "Extra object"
+    required: true
+    schema:
+      $ref: "#/definitions/Extra"
 
   limitQuery:
     in: query

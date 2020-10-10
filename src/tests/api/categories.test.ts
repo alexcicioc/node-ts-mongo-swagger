@@ -1,12 +1,9 @@
-import chai, { expect } from 'chai';
-import spies from 'chai-spies';
+import { expect } from 'chai';
 import sinon from 'sinon';
 import { AppRequest } from "../../types/request";
 import { CategoryOrm } from "../../orms/category";
 import { getCategories } from "../../controllers/categories";
 import { ResponseMock } from "./mocks/mocked-response";
-
-chai.use(spies);
 
 describe('Testing change major mutation', function () {
 
@@ -34,6 +31,7 @@ describe('Testing change major mutation', function () {
     // @ts-ignore
     const req: AppRequest = {
       orms: {
+        // @ts-ignore
         categoryOrm: categoryOrm,
       },
       query: {

@@ -1,7 +1,6 @@
 import express from 'express';
 import createMiddleware from 'swagger-express-middleware';
 import { specPath } from './config';
-import menus from './controllers/menus';
 import routes from './routes';
 import requestLog from './middlewares/request-log';
 import { syncDB } from './migrations';
@@ -17,7 +16,6 @@ createMiddleware(specPath, app, (err, middleware) => {
     middleware.validateRequest(),
   );
   app.use(requestLog);
-  app.use('/v1/menus', menus);
   app.use('/v1', routes);
 
   app.listen(8000, () => {

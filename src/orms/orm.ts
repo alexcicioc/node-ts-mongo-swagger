@@ -1,19 +1,20 @@
 import { ModelCtor } from 'sequelize/types';
 import { Model } from 'sequelize';
-import { ModelAttributes } from 'sequelize/types/lib/model';
+import { ModelAttributes, ModelOptions } from 'sequelize/types/lib/model';
 import { getConnection } from '../services/mysql-connection';
 
 interface Query {
   where?: object;
   limit?: number;
   offset?: number;
+  include?: any[];
 }
 
 export class Orm {
-  private sequelizeSchema: ModelCtor<Model<any, any>>;
+  public sequelizeSchema: ModelCtor<Model<any, any>>;
 
-  public constructor(tableName: string, schema: ModelAttributes<any>) {
-    this.sequelizeSchema = getConnection().define(tableName, schema);
+  public constructor(tableName: string, schema: ModelAttributes<any>, options: ModelOptions = {}) {
+    this.sequelizeSchema = getConnection().define(tableName, schema, options);
   }
 
   public getById(id: number): Promise<Model> {
