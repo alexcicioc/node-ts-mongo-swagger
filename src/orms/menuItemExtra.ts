@@ -12,7 +12,7 @@ export class MenuItemExtraOrm extends Orm {
           allowNull: false,
         },
         extraId: {
-          type: DataTypes.STRING,
+          type: DataTypes.INTEGER,
           allowNull: false,
         },
       },

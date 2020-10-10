@@ -2,6 +2,7 @@
 
 ### Nodemon
 1. Developed on node 12, if you have a different version either install nvm or use the docker solution
+1. Update config.ts with the proper mysql instance variables
 1. `npm install -g nodemon`
 1. `nodemon src/index.ts -- --project tsconfig.json`
 
