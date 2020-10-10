@@ -1,16 +1,16 @@
 import { DataTypes } from 'sequelize';
 import { Orm } from './orm';
 
-export class MenuOrm extends Orm {
+export class CategoryOrm extends Orm {
   public constructor() {
-    super('menu', {
+    super('category', {
       title: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      status: {
+      description: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     });
   }

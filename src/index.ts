@@ -1,16 +1,12 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import createMiddleware from 'swagger-express-middleware';
-import mongoSanitize from 'express-mongo-sanitize';
-import { mongoConnection, specPath } from './config';
-import menu from './controllers/menu';
+import { specPath } from './config';
+import menus from './controllers/menus';
+import routes from './routes';
 import requestLog from './middlewares/request-log';
+import { syncDB } from './migrations';
 
 const app = express();
-mongoose.connect(
-  `mongodb://${mongoConnection.username}:${mongoConnection.password}@${mongoConnection.host}:${mongoConnection.port}`,
-  { useNewUrlParser: true },
-);
 
 createMiddleware(specPath, app, (err, middleware) => {
   app.use(
@@ -20,11 +16,13 @@ createMiddleware(specPath, app, (err, middleware) => {
     middleware.parseRequest(),
     middleware.validateRequest(),
   );
-  app.use(mongoSanitize);
   app.use(requestLog);
-  app.use('/v1/menus', menu);
+  app.use('/v1/menus', menus);
+  app.use('/v1', routes);
 
   app.listen(8000, () => {
-    console.log('The PetStore sample is now running at http://localhost:8000');
+    console.log('App running at http://localhost:8000');
   });
 });
+
+syncDB();

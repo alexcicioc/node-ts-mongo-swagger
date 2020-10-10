@@ -26,6 +26,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "import/prefer-default-export": "off",
     "quotes": ["error", "single", { "avoidEscape": true }],
     "camelcase": "error",
     "prefer-destructuring": "error",
@@ -80,6 +81,7 @@
     "import/no-unresolved": ["error", { "caseSensitive": true }],
     "import/no-extraneous-dependencies": ["error"]
   },
+  "ignorePatterns": [ "src/tests/**/*.ts" ],
   "settings": {
     "typescript": {
       "alwaysTryTypes": true

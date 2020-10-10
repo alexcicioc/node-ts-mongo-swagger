@@ -22,22 +22,25 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - $ref: '#/parameters/limitQuery'
+        - $ref: '#/parameters/offsetQuery'
         - name: "status"
           in: "query"
           description: "Status values that need to be considered for filter"
-          type: "array"
+          type: array
+          required: true
           items:
-            type: "string"
+            type: string
             enum:
-              - "published"
-              - "draft"
-            default: "draft"
+              - published
+              - draft
+            default: draft
           collectionFormat: "multi"
       responses:
         "200":
           description: "successful operation"
           schema:
-            type: "array"
+            type: array
             items:
               $ref: "#/definitions/MenuList"
         "400":
@@ -52,16 +55,154 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - in: "body"
-          name: "body"
-          description: "Menu object"
-          required: true
-          schema:
-            $ref: "#/definitions/Menu"
+        - $ref: '#/parameters/menuBody'
       responses:
         "400":
           description: "Bad Request"
 
+  /menus/{id}:
+    get:
+      tags:
+        - "menu"
+      summary: "Get a food menu by id"
+      operationId: "getFoodMenu"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MenuList"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+    put:
+      tags:
+        - "menu"
+      summary: "Update a menu"
+      operationId: "updateFoodMenu"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+        - $ref: '#/parameters/menuBody'
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+    delete:
+      tags:
+        - "menu"
+      summary: "Delete a menu"
+      operationId: "deleteFoodMenu"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+  /categories:
+    get:
+      tags:
+        - "category"
+      summary: "Get a list of food categories"
+      operationId: "getFoodCategorys"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/limitQuery'
+        - $ref: '#/parameters/offsetQuery'
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/CategoryList"
+        "400":
+          description: "Invalid status value"
+    post:
+      tags:
+        - "category"
+      summary: "Add a new category"
+      operationId: "createCategory"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/categoryBody'
+      responses:
+        "400":
+          description: "Bad Request"
+
+  /categories/{id}:
+    get:
+      tags:
+        - "category"
+      summary: "Get a food category by id"
+      operationId: "getFoodCategory"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/CategoryList"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+    put:
+      tags:
+        - "category"
+      summary: "Update a category"
+      operationId: "updateFoodCategory"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+        - $ref: '#/parameters/categoryBody'
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: Bad request
+        404:
+          description: Not found
+    delete:
+      tags:
+        - "category"
+      summary: "Delete a category"
+      operationId: "deleteFoodCategory"
+      produces:
+        - "application/json"
+      parameters:
+        - $ref: '#/parameters/idPath'
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: Bad request
+        404:
+          description: Not found
 
 definitions:
   MenuList:
@@ -70,33 +211,36 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/Menu"
-
-  Menu:
-    type: "object"
+  CategoryList:
     properties:
-      id:
-        type: "integer"
-        format: "int64"
-      title:
-        type: "string"
-      items:
-        type: "array"
+      results:
+        type: array
         items:
-          $ref: "#/definitions/MenuItem"
+          $ref: "#/definitions/Category"
+  Menu:
+    properties:
+      title:
+        type: string
       status:
-        type: "string"
+        type: string
         enum:
-          - "published"
-          - "draft"
-        default: "draft"
+          - published
+          - draft
+        default: draft
+
+  Category:
+    properties:
+      title:
+        type: string
+      description:
+        type: string
 
   MenuItem:
-    type: "object"
     properties:
       title:
-        type: "string"
+        type: string
       description:
-        type: "string"
+        type: string
       addons:
         type: array
         items:
@@ -105,3 +249,40 @@ definitions:
         type: array
         items:
           type: string
+
+parameters:
+  idPath:
+    name: "id"
+    in: "path"
+    description: "Id to query the resource by"
+    type: integer
+    format: int64
+    required: true
+
+  menuBody:
+    in: "body"
+    name: "body"
+    description: "Menu object"
+    required: true
+    schema:
+      $ref: "#/definitions/Menu"
+
+  categoryBody:
+    in: "body"
+    name: "body"
+    description: "Category object"
+    required: true
+    schema:
+      $ref: "#/definitions/Category"
+
+  limitQuery:
+    in: query
+    name: limit
+    type: integer
+    default: 10
+
+  offsetQuery:
+    in: query
+    name: offset
+    type: integer
+    default: 0

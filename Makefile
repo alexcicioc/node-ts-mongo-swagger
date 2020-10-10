@@ -1,15 +1,15 @@
 start-output:
-		docker-compose up --remove-orphans
+		./compose up --remove-orphans
 start:
-		docker-compose up -d
+		./compose up -d
 stop:
-		docker-compose stop
+		./compose stop
 down:
-		docker-compose down --remove-orphans
+		./compose down --remove-orphans
 build:
-		docker-compose build
+		./compose build
 build-no-cache:
-		docker-compose build --no-cache
+		./compose build --no-cache
 rebuild:
 		make build start
 restart:
