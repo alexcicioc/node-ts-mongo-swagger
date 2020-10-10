@@ -23,8 +23,6 @@ export const getMenuItems = async (req: AppRequest, res: Response): Promise<Resp
       },
     ],
   });
-  // @ts-ignore
-  console.log(menuItems[0].extras);
 
   const total =
     menuItems.length === commonParams.limit

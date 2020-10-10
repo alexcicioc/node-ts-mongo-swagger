@@ -22,3 +22,9 @@
 
 ### Populating the database
 There's no need for a sql import file, sequelize will automatically create the table structure based on the schema
+
+### Testing the API
+1. Go to https://editor.swagger.io/
+1. Copy the spec contents from ./specs/menu-api.yaml
+1. Paste it in swagger editor
+1. Run requests from swagger editor
